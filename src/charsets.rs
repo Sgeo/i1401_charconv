@@ -2,7 +2,7 @@
 
 use std::{collections::HashMap, sync::LazyLock};
 
-const UNICODE_CARD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static UNICODE_CARD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     // Taken from https://bitsavers.org/pdf/ibm/1401/A24-1403-5_1401_Reference_Apr62.pdf page 170
     // Using the defined chain described there
     let mut array = ['�'; 64];
@@ -75,7 +75,7 @@ const UNICODE_CARD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     array
 });
 
-const BCD_FROM_UNICODE_CARD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+static BCD_FROM_UNICODE_CARD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
     for (bcd, char) in UNICODE_CARD_FROM_BCD.iter().enumerate() {
         hashmap.insert(*char, bcd as u8);
@@ -85,7 +85,7 @@ const BCD_FROM_UNICODE_CARD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     hashmap
 });
 
-const UNICODE_PRINT_A_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static UNICODE_PRINT_A_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     let mut array = *UNICODE_CARD_FROM_BCD;
 
     array[0b111101] = ' ';
@@ -108,7 +108,7 @@ const UNICODE_PRINT_A_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     array
 });
 
-const VDC_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static VDC_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     let mut array = *UNICODE_CARD_FROM_BCD;
 
     array[0b010000] = 'c';
@@ -135,7 +135,7 @@ const VDC_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 
 });
 
-const BCD_FROM_VDC: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+static BCD_FROM_VDC: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
     for (bcd, char) in VDC_FROM_BCD.iter().enumerate() {
         hashmap.insert(*char, bcd as u8);
@@ -145,7 +145,7 @@ const BCD_FROM_VDC: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     hashmap
 });
 
-const SIMH_NEW_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static SIMH_NEW_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     let mut array = ['�'; 64];
 
     // Copy/pasted from SIMH documentation
@@ -218,7 +218,7 @@ const SIMH_NEW_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 });
 
 
-const BCD_FROM_SIMH_NEW: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+static BCD_FROM_SIMH_NEW: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
     for (bcd, char) in SIMH_NEW_FROM_BCD.iter().enumerate() {
         hashmap.insert(*char, bcd as u8);
@@ -232,7 +232,7 @@ const BCD_FROM_SIMH_NEW: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     hashmap
 });
 
-const SIMH_OLD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static SIMH_OLD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     let mut array = *SIMH_NEW_FROM_BCD;
     array[0o17] = '(';
     array[0o32] = '\'';
@@ -245,7 +245,7 @@ const SIMH_OLD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 
 });
 
-const BCD_FROM_SIMH_OLD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+static BCD_FROM_SIMH_OLD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
     for (bcd, char) in SIMH_OLD_FROM_BCD.iter().enumerate() {
         hashmap.insert(*char, bcd as u8);
@@ -255,7 +255,7 @@ const BCD_FROM_SIMH_OLD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     hashmap
 });
 
-const SIM1401_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+static SIM1401_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     // This encoding is a composition of SIM1401's BCD -> EBCDIC encoding
     // and Hercules's EBCDIC-1047 -> ISO-8859-1 encoding
     let mut array: [char; 64] = ['�'; 64];
@@ -290,7 +290,7 @@ const SIM1401_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 
 });
 
-const BCD_FROM_SIM1401: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+static BCD_FROM_SIM1401: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     // Unlike the other encodings, we'll use SIM1401's translation tables
     // Instead of assuming it's mirrored from BCD->SIM1401
     // Roundtrip test: for(let i = 0; i < 64; i++) { let roundtrip = trei[trie[i]]; if(roundtrip != i) { console.log("Roundtrip failure, i", i, "roundtrip", roundtrip); } }
@@ -347,3 +347,30 @@ const BCD_FROM_SIM1401: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
 
     hashmap
 });
+
+pub struct Encoding {
+    from_bcd: &'static LazyLock<[char; 64]>,
+    to_bcd: &'static LazyLock<HashMap<char, u8>>
+}
+
+impl Encoding {
+    fn to_bcd(&self, string: &str) -> Vec<u8> {
+        string.chars().map(|char| *self.to_bcd.get(&char).unwrap_or(&0)).collect::<Vec<u8>>()
+    }
+
+    fn from_bcd(&self, bcd: &[u8]) -> String {
+        bcd.iter().map(|bcd_char| self.from_bcd[*bcd_char as usize]).collect::<String>()
+    }
+}
+
+fn get_encoding(encoding: &str) -> Option<Encoding> {
+    match encoding.to_lowercase().as_str() {
+        "unicode-card" => Some(Encoding { from_bcd: &UNICODE_CARD_FROM_BCD, to_bcd: &BCD_FROM_UNICODE_CARD}),
+        //"unicode-print-a" => Some(Encoding { from_bcd: &UNICODE_PRINT_A_FROM_BCD, to_bcd: &BCD_FROM_UNICODE_PRINT_A})
+        "vdc" => Some(Encoding {from_bcd: &VDC_FROM_BCD, to_bcd: &BCD_FROM_VDC}),
+        "simh-new" => Some(Encoding {from_bcd: &SIMH_NEW_FROM_BCD, to_bcd: &BCD_FROM_SIMH_NEW}),
+        "simh-old" => Some(Encoding { from_bcd: &SIMH_OLD_FROM_BCD, to_bcd: &BCD_FROM_SIMH_OLD}),
+        "sim1401-1047" => Some(Encoding {from_bcd: &SIM1401_FROM_BCD, to_bcd: &BCD_FROM_SIM1401}),
+        _ => None
+    }
+}
