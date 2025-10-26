@@ -26,7 +26,7 @@ const UNICODE_CARD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     array[0b011101] = '='; // called word separator
     array[0b011110] = '\'';
     array[0b011111] = '"';
-    array[0b010000] = '¢';
+    array[0b010000] = '¢'; // Not readable from card??
     array[0b001011] = '#';
     array[0b001100] = '@';
     array[0b001101] = ':';
@@ -72,6 +72,29 @@ const UNICODE_CARD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     array[0b001000] = '8';
     array[0b001001] = '9';
 
+    array
+});
+
+const UNICODE_PRINT_A_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+    let mut array = *UNICODE_CARD_FROM_BCD;
+
+    array[0b111101] = ' ';
+    array[0b111110] = ' ';
+    array[0b111111] = ' ';
+    array[0b101101] = ' ';
+    array[0b101110] = ' ';
+    array[0b101111] = ' ';
+    array[0b011101] = ' ';
+    array[0b011110] = ' ';
+    array[0b011111] = ' ';
+    array[0b010000] = '\u{29E7}'; // Thermodynamic (⧧), not sure if appropriate but it looks like record mark
+    array[0b001101] = ' ';
+    array[0b001110] = ' ';
+    array[0b001111] = ' '; // Tape mark (square root?)
+    array[0b111010] = '&';
+    array[0b101010] = '-';
+
 
     array
 });
+
