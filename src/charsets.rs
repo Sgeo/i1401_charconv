@@ -227,6 +227,7 @@ const BCD_FROM_SIMH_NEW: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     hashmap.insert('=', 0o13);
     hashmap.insert('\'', 0o14);
     hashmap.insert('(', 0o34);
+    hashmap.insert('+', 0o60); // Documented in the simh-old area, not in the main charset.
 
     hashmap
 });
