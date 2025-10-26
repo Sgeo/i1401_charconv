@@ -1,5 +1,5 @@
 [package]
-name = "i1401_charconv"
+name = "i1401-charconv"
 version = "0.1.0"
 edition = "2021"
 
