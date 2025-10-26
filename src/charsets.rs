@@ -98,3 +98,23 @@ const UNICODE_PRINT_A_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
     array
 });
 
+const VDC_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+    let mut array = *UNICODE_CARD_FROM_BCD;
+
+    array[0b010000] = 'c';
+    array[0b001111] = 't';
+    array[0b011010] = 'r';
+    array[0b011101] = 'v';
+    array[0b011111] = 's';
+    array[0b100000] = '!';
+    array[0b101111] = '^';
+    array[0b101010] = '!'; // The VDC <-> SIMH page wrongly lists this as B. Other documentation including VDC says B82
+    array[0b101111] = '^';
+    array[0b111010] = '?';
+    array[0b111100] = 'q'; 
+    array[0b111111] = 'g';
+
+    array
+
+});
+
