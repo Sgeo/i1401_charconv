@@ -354,16 +354,16 @@ pub struct Encoding {
 }
 
 impl Encoding {
-    fn to_bcd(&self, string: &str) -> Vec<u8> {
+    pub fn to_bcd(&self, string: &str) -> Vec<u8> {
         string.chars().map(|char| *self.to_bcd.get(&char).unwrap_or(&0)).collect::<Vec<u8>>()
     }
 
-    fn from_bcd(&self, bcd: &[u8]) -> String {
+    pub fn from_bcd(&self, bcd: &[u8]) -> String {
         bcd.iter().map(|bcd_char| self.from_bcd[*bcd_char as usize]).collect::<String>()
     }
 }
 
-fn get_encoding(encoding: &str) -> Option<Encoding> {
+pub fn get_encoding(encoding: &str) -> Option<Encoding> {
     match encoding.to_lowercase().as_str() {
         "unicode-card" => Some(Encoding { from_bcd: &UNICODE_CARD_FROM_BCD, to_bcd: &BCD_FROM_UNICODE_CARD}),
         //"unicode-print-a" => Some(Encoding { from_bcd: &UNICODE_PRINT_A_FROM_BCD, to_bcd: &BCD_FROM_UNICODE_PRINT_A})
