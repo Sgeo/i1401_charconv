@@ -216,3 +216,40 @@ const SIMH_NEW_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 
     array
 });
+
+
+const BCD_FROM_SIMH_NEW: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+    let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
+    for (bcd, char) in SIMH_NEW_FROM_BCD.iter().enumerate() {
+        hashmap.insert(*char, bcd as u8);
+    }
+    hashmap.insert(' ', 0); // Not relevant for unicode-card, but relevant for similar
+    hashmap.insert('=', 0o13);
+    hashmap.insert('\'', 0o14);
+    hashmap.insert('(', 0o34);
+
+    hashmap
+});
+
+const SIMH_OLD_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
+    let mut array = *SIMH_NEW_FROM_BCD;
+    array[0o17] = '(';
+    array[0o32] = '\'';
+    array[0o35] = '=';
+    array[0o37] = '+';
+    array[0o60] = '&';
+    array[0o77] = '"';
+
+    array
+
+});
+
+const BCD_FROM_SIMH_OLD: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
+    let mut hashmap: HashMap<char, u8> = HashMap::with_capacity(64);
+    for (bcd, char) in SIMH_OLD_FROM_BCD.iter().enumerate() {
+        hashmap.insert(*char, bcd as u8);
+    }
+    hashmap.insert(' ', 0); // Not relevant for unicode-card, but relevant for similar
+
+    hashmap
+});
