@@ -293,6 +293,9 @@ const SIM1401_FROM_BCD: LazyLock<[char; 64]> = LazyLock::new(|| {
 const BCD_FROM_SIM1401: LazyLock<HashMap<char, u8>> = LazyLock::new(|| {
     // Unlike the other encodings, we'll use SIM1401's translation tables
     // Instead of assuming it's mirrored from BCD->SIM1401
+    // Roundtrip test: for(let i = 0; i < 64; i++) { let roundtrip = trei[trie[i]]; if(roundtrip != i) { console.log("Roundtrip failure, i", i, "roundtrip", roundtrip); } }
+    // BCD character 0o20 does not survive the BCD -> TRIE -> TREI -> BCD roundtrip
+    // The cent character that cannot be read from card
 
     let TREI: [u8; 256] = [
                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
