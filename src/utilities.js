@@ -89,3 +89,23 @@ for(let i = 0; i < 64; i++) {
     let char = String.fromCodePoint(unicode_codepoint);
     sim1401_1047_encode[i] = char;
 }
+
+trei = '00'.repeat(64)                    +
+       '00000000000000000000003B3C3D3E3F' +
+       '30000000000000000000002B2C2D2E2F' +
+       '20110000000000000000001B1C1D1E1F' +
+       '201100000000000000000A0B0C0D0E0F' +
+       '00'.repeat(64)                    +
+       '3A313233343536373839000000000000' +
+       '2A212223242526272829000000000000' +
+       '1A001213141516171819000000000000' +
+       '0A010203040506070809000000000000' ;
+sim1401_1047_decode = {};
+for(let i = 0; i < 256; i++) {
+    let bcd = parseInt(`${trei[2*i]}${trei[2*i+1]}`, 16);
+    let char = String.fromCodePoint(cp1047toUnicode[i]);
+    if(bcd != 0) {
+        sim1401_1047_decode[char] = bcd;
+    }
+}
+sim1401_1047_decode[" "] = 0x00;
